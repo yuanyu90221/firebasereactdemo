@@ -10,7 +10,7 @@ const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
 module.exports = {
   // 檔案起始點從 entry 進入，因為是陣列所以也可以是多個檔案
   entry: [
-    './src/hello.js',
+    './src/app.js',
   ],
   // output 是放入產生出來的結果的相關參數
   output: {

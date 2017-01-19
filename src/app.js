@@ -1,22 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-class Hello extends React.Component{
-	constructor(props){
-		super(props);
-		this.state = {
+import Hello from './components/hello.js'
 
-		};
-	}
-	render(){
-
-		return (
-			<div className={this.props.className}>
-				<h1>{this.props.text}</h1>
-			</div>
-		);
-	}
-}
 class App extends React.Component{
 	constructor(props){
 		super(props);
