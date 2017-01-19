@@ -98,7 +98,7 @@
 
 				console.log(arrayContent);
 				var result = arrayContent.map(function (element) {
-					return _react2.default.createElement(_block2.default, { key: element.text, className: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px', text: element.text });
+					return _react2.default.createElement(_block2.default, { key: element.text, textId: element.text, className: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px', text: element.text });
 				});
 				return _react2.default.createElement(
 					'div',
@@ -31796,13 +31796,21 @@
 /* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _inputfield = __webpack_require__(181);
+
+	var _inputfield2 = _interopRequireDefault(_inputfield);
+
+	var _infofield = __webpack_require__(182);
+
+	var _infofield2 = _interopRequireDefault(_infofield);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31820,23 +31828,92 @@
 
 			var _this = _possibleConstructorReturn(this, (Block.__proto__ || Object.getPrototypeOf(Block)).call(this, props));
 
-			_this.state = {};
+			var classStr = _this.props.className + " block_style padding_0px";
+			var me = _this;
+			_this.state = {
+				event: "",
+				name: "",
+				changeTime: "",
+				isBlock: false,
+				classStr: classStr,
+				inputClass: ''
+			};
 			return _this;
 		}
 
 		_createClass(Block, [{
-			key: "render",
+			key: 'handleOnFocusIn',
+			value: function handleOnFocusIn(e) {
+
+				var me = this;
+				me.setState({ event: "focusIn" });
+				me.setState({ changeTime: new Date().toLocaleString() });
+				me.setState({ isBlock: true });
+				me.setState({ inputClass: 'inputOnFocusSate' });
+			}
+		}, {
+			key: 'handleOnFocusOut',
+			value: function handleOnFocusOut(e) {
+
+				var me = this;
+				me.setState({ event: "focusOut" });
+				me.setState({ changeTime: new Date().toLocaleString() });
+				me.setState({ isBlock: false });
+				me.setState({ inputClass: 'inputOnFocusOutSate' });
+			}
+		}, {
+			key: 'handleMouseEnter',
+			value: function handleMouseEnter(e) {
+				this.doMouseEnter();
+			}
+		}, {
+			key: 'handleMouseLeave',
+			value: function handleMouseLeave(e) {
+				this.doMouseLeave();
+			}
+		}, {
+			key: 'doMouseEnter',
+			value: function doMouseEnter() {
+				var originClassStr = this.state.classStr;
+				originClassStr += " mouseEnterState";
+				this.setState({ classStr: originClassStr });
+				this.setState({ event: "mouseEnter" });
+				this.setState({ changeTime: new Date().toLocaleString() });
+				this.setState({ isBlock: true });
+			}
+		}, {
+			key: 'doMouseLeave',
+			value: function doMouseLeave() {
+				var originClassStr = this.state.classStr;
+				originClassStr = originClassStr.replace(" mouseEnterState", "");
+				this.setState({ classStr: originClassStr });
+				this.setState({ event: "mouseLeave" });
+				this.setState({ changeTime: new Date().toLocaleString() });
+				this.setState({ isBlock: false });
+			}
+		}, {
+			key: 'render',
 			value: function render() {
-				var classStr = this.props.className + " block_style padding_0px";
+				var classStr = this.state.classStr;
+
+				// this.setState({classStr:classStr});
 				console.log(classStr);
+
 				return _react2.default.createElement(
-					"div",
-					{ className: classStr },
+					'div',
+					{ className: classStr, onMouseEnter: this.handleMouseEnter.bind(this), onMouseLeave: this.handleMouseLeave.bind(this) },
 					_react2.default.createElement(
-						"h1",
+						'h1',
 						null,
 						this.props.text
-					)
+					),
+					_react2.default.createElement(_inputfield2.default, { textId: this.props.textId,
+						handleOnFocusIn: this.handleOnFocusIn.bind(this),
+						handleOnFocusOut: this.handleOnFocusOut.bind(this),
+						inputClass: this.state.inputClass
+					}),
+					_react2.default.createElement(_infofield2.default, { name: this.state.name,
+						changeTime: this.state.changeTime, event: this.state.event, isBlock: this.state.isBlock })
 				);
 			}
 		}]);
@@ -31845,6 +31922,129 @@
 	}(_react2.default.Component);
 
 	module.exports = Block;
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var InputField = function (_React$Component) {
+		_inherits(InputField, _React$Component);
+
+		function InputField(props) {
+			_classCallCheck(this, InputField);
+
+			var _this = _possibleConstructorReturn(this, (InputField.__proto__ || Object.getPrototypeOf(InputField)).call(this, props));
+
+			_this.state = {};
+			return _this;
+		}
+
+		_createClass(InputField, [{
+			key: "render",
+			value: function render() {
+				var classStr = "margin_0px padding_0px " + this.props.inputClass;
+				console.log(classStr);
+				return _react2.default.createElement("input", { type: "text", className: classStr, id: this.props.textId,
+					onFocus: this.props.handleOnFocusIn.bind(this),
+					onBlur: this.props.handleOnFocusOut.bind(this) });
+			}
+		}]);
+
+		return InputField;
+	}(_react2.default.Component);
+
+	module.exports = InputField;
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var InfoField = function (_React$Component) {
+		_inherits(InfoField, _React$Component);
+
+		function InfoField(props) {
+			_classCallCheck(this, InfoField);
+
+			var _this = _possibleConstructorReturn(this, (InfoField.__proto__ || Object.getPrototypeOf(InfoField)).call(this, props));
+
+			_this.state = {};
+			return _this;
+		}
+
+		_createClass(InfoField, [{
+			key: "render",
+			value: function render() {
+				var classStr = "padding_0px";
+				console.log(classStr);
+				// console.log(this.state);
+				var isBlockStr = this.props.isBlock == true ? "true" : "false";
+				return _react2.default.createElement(
+					"div",
+					{ className: classStr },
+					_react2.default.createElement(
+						"label",
+						{ className: "labelblock" },
+						"Name:",
+						this.props.name
+					),
+					_react2.default.createElement(
+						"label",
+						{ className: "labelblock" },
+						"changeTime:",
+						this.props.changeTime
+					),
+					_react2.default.createElement(
+						"label",
+						{ className: "labelblock" },
+						"Event:",
+						this.props.event
+					),
+					_react2.default.createElement(
+						"label",
+						{ className: "labelblock" },
+						"IsBlock:",
+						isBlockStr
+					)
+				);
+			}
+		}]);
+
+		return InfoField;
+	}(_react2.default.Component);
+
+	module.exports = InfoField;
 
 /***/ }
 /******/ ]);

@@ -6,10 +6,30 @@
 }
 .block_style {
 	border: solid;
-    min-width: 147px;
-    min-height: 147px;
+    min-width: 226px;
+    min-height: 226px;
     /*等比例正方形*/
-    height: 33.3vw;
-    width: 33.3%;
+    height: 33.333333vw;
+    width: 33.333333%;
     text-align: center;
+}
+.labelblock {
+	display: block;
+}
+
+.mouseEnterState {
+	border-color: red;
+}
+
+.mouseLeaveState {
+	border-color: black;
+}
+
+.inputOnFocusSate {
+	background: #10EC9B;
+}
+
+
+.inputOnFocusOutSate {
+	background: #FFF;
 }
