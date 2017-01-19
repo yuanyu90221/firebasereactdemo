@@ -67,9 +67,9 @@
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _hello = __webpack_require__(180);
+	var _block = __webpack_require__(180);
 
-	var _hello2 = _interopRequireDefault(_hello);
+	var _block2 = _interopRequireDefault(_block);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -98,7 +98,7 @@
 
 				console.log(arrayContent);
 				var result = arrayContent.map(function (element) {
-					return _react2.default.createElement(_hello2.default, { key: element.text, className: 'well col-sm-4 col-md-4 col-lg-4 margin_0px', text: element.text });
+					return _react2.default.createElement(_block2.default, { key: element.text, className: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px', text: element.text });
 				});
 				return _react2.default.createElement(
 					'div',
@@ -31796,7 +31796,7 @@
 /* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -31812,27 +31812,28 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Hello = function (_React$Component) {
-		_inherits(Hello, _React$Component);
+	var Block = function (_React$Component) {
+		_inherits(Block, _React$Component);
 
-		function Hello(props) {
-			_classCallCheck(this, Hello);
+		function Block(props) {
+			_classCallCheck(this, Block);
 
-			var _this = _possibleConstructorReturn(this, (Hello.__proto__ || Object.getPrototypeOf(Hello)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (Block.__proto__ || Object.getPrototypeOf(Block)).call(this, props));
 
 			_this.state = {};
 			return _this;
 		}
 
-		_createClass(Hello, [{
-			key: 'render',
+		_createClass(Block, [{
+			key: "render",
 			value: function render() {
-
+				var classStr = this.props.className + " block_style padding_0px";
+				console.log(classStr);
 				return _react2.default.createElement(
-					'div',
-					{ className: this.props.className },
+					"div",
+					{ className: classStr },
 					_react2.default.createElement(
-						'h1',
+						"h1",
 						null,
 						this.props.text
 					)
@@ -31840,10 +31841,10 @@
 			}
 		}]);
 
-		return Hello;
+		return Block;
 	}(_react2.default.Component);
 
-	module.exports = Hello;
+	module.exports = Block;
 
 /***/ }
 /******/ ]);

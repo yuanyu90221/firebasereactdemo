@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import Hello from './components/hello.js'
+import Hello from './components/block.js'
 
 class App extends React.Component{
 	constructor(props){
@@ -14,7 +14,7 @@ class App extends React.Component{
         let {arrayContent} = this.props;
         console.log(arrayContent);
         const result = arrayContent.map(function(element){
-        	return <Hello key={element.text} className="well col-sm-4 col-md-4 col-lg-4 margin_0px" text={element.text}/>
+        	return <Hello key={element.text} className="col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px" text={element.text}/>
         });
         return(
          	<div className={this.props.className}>

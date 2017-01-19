@@ -1,7 +1,15 @@
 .margin_0px {
 	margin:0px;
-	
 }
 .padding_0px {
 	padding: 0px;
+}
+.block_style {
+	border: solid;
+    min-width: 147px;
+    min-height: 147px;
+    /*等比例正方形*/
+    height: 33.3vw;
+    width: 33.3%;
+    text-align: center;
 }
