@@ -10,6 +10,18 @@
 	<link rel="stylesheet" type="text/css" href="./assets/bootstrap/dist/css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="./assets/bootstrap/dist/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" type="text/css" href="./css/main.css"/>
+	<script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "",
+        authDomain: "",
+        databaseURL: "",
+        storageBucket: "",
+        messagingSenderId: ""
+      };
+      window.firebase = firebase.initializeApp(config);
+    </script>
 </head>
 <body>
 	<div id="hello" style="width:100%; margin:0px; padding:0px;"></div>
