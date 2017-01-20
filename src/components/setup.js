@@ -53,9 +53,11 @@ class Setup extends React.Component{
 		window.config = config;
 		let firebase = window.firebase;
 		try{
-			firebase.initializeApp(config);
-			window.database = firebase.database();
-			window.userRef = database.ref('users/');
+			if(window.database=={}){
+				firebase.initializeApp(config);
+				window.database = firebase.database();
+				window.userRef = database.ref('users/');
+			}
 		}
 		catch(e){
 			console.log(e.toString());
