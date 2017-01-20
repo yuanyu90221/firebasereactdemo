@@ -10,7 +10,7 @@ class InputField extends React.Component{
 	}
 	render(){
 		let classStr = "margin_0px padding_0px " + this.props.inputClass;
-		console.log(classStr);
+		
 		return (
 			<input type="text" className={classStr} id={this.props.textId} 
 			   onFocus={this.props.handleOnFocusIn.bind(this)}

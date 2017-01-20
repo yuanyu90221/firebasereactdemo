@@ -1,0 +1,78 @@
+import React from 'react';
+import SetupInfo from './setupinfo.js';
+import $ from 'jquery';
+import jQuery from 'jquery';
+class Setup extends React.Component{
+	constructor(props){
+
+		super(props);
+		window.$ = $;
+		window.jQuery = jQuery;
+		let classStr =  this.props.className + " margin_0px  padding_0px";
+        let me = this;
+        
+        let storage = props.localStorage;
+		this.state = {
+          	isShow: false,
+          	apiKey: "",
+        	authDomain: "",
+        	databaseURL: "",
+        	storageBucket: "",
+        	messagingSenderId: "",
+        	name: "",
+        	storage: storage
+		};
+	}
+	handleOnClickShow(e){
+		this.setState({isShow:true});
+	}
+	handleOnClickHide(e){
+		this.setState({isShow:false});
+	}
+	handleOnClickSaveSetting(e){
+		let {storage} = this.state;
+		this.setState({name: $("#name").val()});
+		this.setState({apiKey: $("#apiKey").val()});
+		this.setState({authDomain: $('#authDomain').val()});
+		this.setState({databaseURL: $('#databaseURL').val()});
+		this.setState({storageBucket: $('#storageBucket').val()});
+		this.setState({messagingSenderId: $('#messagingSenderId').val()});
+		storage.setItem('name',$("#name").val())
+		storage.setItem('apiKey',$("#apiKey").val());
+		storage.setItem('authDomain', $('#authDomain').val());
+		storage.setItem('databaseURL', $('#databaseURL').val());
+		storage.setItem('storageBucket',  $('#storageBucket').val());
+		storage.setItem('messagingSenderId',$('#messagingSenderId').val());
+		
+	}
+
+	render(){
+		
+		let classStr =  this.state.classStr;
+        let username="name",
+            apiKey="apiKey",
+            authDomain="authDomain",
+            databaseURL="databaseURL",
+            storageBucket="storageBucket", 
+            messagingSenderId ="messagingSenderId";
+		
+		return (
+			<div className={classStr} >
+				<div className="btn btn-info" id={this.props.showSetting} onClick={this.handleOnClickShow.bind(this)}>{this.props.showSetting}</div>
+				<div className="btn btn-danger" id={this.props.hideSetting} onClick={this.handleOnClickHide.bind(this)}>{this.props.hideSetting}</div>
+				<div className="btn btn-warning" id={this.props.saveSetting} onClick={this.handleOnClickSaveSetting.bind(this)}>{this.props.saveSetting}</div>
+				{this.state.isShow&&<SetupInfo 
+										username={username} 
+										apiKey={apiKey} 
+										authDomain={authDomain} 
+										databaseURL={databaseURL} 
+										storageBucket={storageBucket} 
+										messagingSenderId={messagingSenderId}
+										localStorage={this.state.storage}
+							        />}
+			</div>
+		);
+	}
+}
+
+module.exports = Setup;

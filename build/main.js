@@ -71,6 +71,10 @@
 
 	var _block2 = _interopRequireDefault(_block);
 
+	var _setup = __webpack_require__(183);
+
+	var _setup2 = _interopRequireDefault(_setup);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -87,6 +91,7 @@
 
 			var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
+			console.log(props.localStorage);
 			_this.state = {};
 			return _this;
 		}
@@ -95,14 +100,20 @@
 			key: 'render',
 			value: function render() {
 				var arrayContent = this.props.arrayContent;
+				var localStorage = this.props.localStorage;
 
-				console.log(arrayContent);
+				var showSetting = "show",
+				    hideSetting = "hide",
+				    saveSetting = "save";
+
 				var result = arrayContent.map(function (element) {
-					return _react2.default.createElement(_block2.default, { key: element.text, textId: element.text, className: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px', text: element.text });
+					return _react2.default.createElement(_block2.default, { key: element.text, textId: element.text, className: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px', text: element.text, localStorage: localStorage });
 				});
 				return _react2.default.createElement(
 					'div',
 					{ className: this.props.className },
+					_react2.default.createElement(_setup2.default, { classStr: this.props.className, showSetting: showSetting, hideSetting: hideSetting, saveSetting: saveSetting,
+						localStorage: this.props.localStorage }),
 					result
 				);
 			}
@@ -130,7 +141,8 @@
 	}, {
 		"text": "2x2"
 	}];
-	_reactDom2.default.render(_react2.default.createElement(App, { className: 'row col-sm-12 col-md-12 col-lg-12 margin_0px padding_0px', arrayContent: arrayContent }), document.getElementById('hello'));
+	var localStorage = window.localStorage;
+	_reactDom2.default.render(_react2.default.createElement(App, { className: 'row col-sm-12 col-md-12 col-lg-12 margin_0px padding_0px', arrayContent: arrayContent, localStorage: localStorage }), document.getElementById('hello'));
 
 /***/ },
 /* 2 */
@@ -31829,14 +31841,15 @@
 			var _this = _possibleConstructorReturn(this, (Block.__proto__ || Object.getPrototypeOf(Block)).call(this, props));
 
 			var classStr = _this.props.className + " block_style padding_0px";
-			var me = _this;
+
 			_this.state = {
 				event: "",
 				name: "",
 				changeTime: "",
 				isBlock: false,
 				classStr: classStr,
-				inputClass: ''
+				inputClass: '',
+				storage: _this.props.localStorage
 			};
 			return _this;
 		}
@@ -31846,20 +31859,30 @@
 			value: function handleOnFocusIn(e) {
 
 				var me = this;
+				var storage = me.state.storage;
+
 				me.setState({ event: "focusIn" });
 				me.setState({ changeTime: new Date().toLocaleString() });
 				me.setState({ isBlock: true });
 				me.setState({ inputClass: 'inputOnFocusSate' });
+				if (storage.getItem('name') != undefined) {
+					me.setState({ name: storage.getItem('name') });
+				}
 			}
 		}, {
 			key: 'handleOnFocusOut',
 			value: function handleOnFocusOut(e) {
 
 				var me = this;
+				var storage = me.state.storage;
+
 				me.setState({ event: "focusOut" });
 				me.setState({ changeTime: new Date().toLocaleString() });
 				me.setState({ isBlock: false });
 				me.setState({ inputClass: 'inputOnFocusOutSate' });
+				if (storage.getItem('name') != undefined) {
+					me.setState({ name: storage.getItem('name') });
+				}
 			}
 		}, {
 			key: 'handleMouseEnter',
@@ -31876,28 +31899,35 @@
 			value: function doMouseEnter() {
 				var originClassStr = this.state.classStr;
 				originClassStr += " mouseEnterState";
+				var storage = this.state.storage;
+
 				this.setState({ classStr: originClassStr });
 				this.setState({ event: "mouseEnter" });
 				this.setState({ changeTime: new Date().toLocaleString() });
 				this.setState({ isBlock: true });
+				if (storage.getItem('name') != undefined) {
+					this.setState({ name: storage.getItem('name') });
+				}
 			}
 		}, {
 			key: 'doMouseLeave',
 			value: function doMouseLeave() {
 				var originClassStr = this.state.classStr;
 				originClassStr = originClassStr.replace(" mouseEnterState", "");
+				var storage = this.state.storage;
+
 				this.setState({ classStr: originClassStr });
 				this.setState({ event: "mouseLeave" });
 				this.setState({ changeTime: new Date().toLocaleString() });
 				this.setState({ isBlock: false });
+				if (storage.getItem('name') != undefined) {
+					this.setState({ name: storage.getItem('name') });
+				}
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				var classStr = this.state.classStr;
-
-				// this.setState({classStr:classStr});
-				console.log(classStr);
 
 				return _react2.default.createElement(
 					'div',
@@ -31959,7 +31989,7 @@
 			key: "render",
 			value: function render() {
 				var classStr = "margin_0px padding_0px " + this.props.inputClass;
-				console.log(classStr);
+
 				return _react2.default.createElement("input", { type: "text", className: classStr, id: this.props.textId,
 					onFocus: this.props.handleOnFocusIn.bind(this),
 					onBlur: this.props.handleOnFocusOut.bind(this) });
@@ -32007,8 +32037,7 @@
 			key: "render",
 			value: function render() {
 				var classStr = "padding_0px";
-				console.log(classStr);
-				// console.log(this.state);
+
 				var isBlockStr = this.props.isBlock == true ? "true" : "false";
 				return _react2.default.createElement(
 					"div",
@@ -32045,6 +32074,286 @@
 	}(_react2.default.Component);
 
 	module.exports = InfoField;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _setupinfo = __webpack_require__(184);
+
+	var _setupinfo2 = _interopRequireDefault(_setupinfo);
+
+	var _jquery = __webpack_require__(179);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Setup = function (_React$Component) {
+		_inherits(Setup, _React$Component);
+
+		function Setup(props) {
+			_classCallCheck(this, Setup);
+
+			var _this = _possibleConstructorReturn(this, (Setup.__proto__ || Object.getPrototypeOf(Setup)).call(this, props));
+
+			window.$ = _jquery2.default;
+			window.jQuery = _jquery2.default;
+			var classStr = _this.props.className + " margin_0px  padding_0px";
+			var me = _this;
+
+			var storage = props.localStorage;
+			_this.state = {
+				isShow: false,
+				apiKey: "",
+				authDomain: "",
+				databaseURL: "",
+				storageBucket: "",
+				messagingSenderId: "",
+				name: "",
+				storage: storage
+			};
+			return _this;
+		}
+
+		_createClass(Setup, [{
+			key: 'handleOnClickShow',
+			value: function handleOnClickShow(e) {
+				this.setState({ isShow: true });
+			}
+		}, {
+			key: 'handleOnClickHide',
+			value: function handleOnClickHide(e) {
+				this.setState({ isShow: false });
+			}
+		}, {
+			key: 'handleOnClickSaveSetting',
+			value: function handleOnClickSaveSetting(e) {
+				var storage = this.state.storage;
+
+				this.setState({ name: (0, _jquery2.default)("#name").val() });
+				this.setState({ apiKey: (0, _jquery2.default)("#apiKey").val() });
+				this.setState({ authDomain: (0, _jquery2.default)('#authDomain').val() });
+				this.setState({ databaseURL: (0, _jquery2.default)('#databaseURL').val() });
+				this.setState({ storageBucket: (0, _jquery2.default)('#storageBucket').val() });
+				this.setState({ messagingSenderId: (0, _jquery2.default)('#messagingSenderId').val() });
+				storage.setItem('name', (0, _jquery2.default)("#name").val());
+				storage.setItem('apiKey', (0, _jquery2.default)("#apiKey").val());
+				storage.setItem('authDomain', (0, _jquery2.default)('#authDomain').val());
+				storage.setItem('databaseURL', (0, _jquery2.default)('#databaseURL').val());
+				storage.setItem('storageBucket', (0, _jquery2.default)('#storageBucket').val());
+				storage.setItem('messagingSenderId', (0, _jquery2.default)('#messagingSenderId').val());
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+
+				var classStr = this.state.classStr;
+				var username = "name",
+				    apiKey = "apiKey",
+				    authDomain = "authDomain",
+				    databaseURL = "databaseURL",
+				    storageBucket = "storageBucket",
+				    messagingSenderId = "messagingSenderId";
+
+				return _react2.default.createElement(
+					'div',
+					{ className: classStr },
+					_react2.default.createElement(
+						'div',
+						{ className: 'btn btn-info', id: this.props.showSetting, onClick: this.handleOnClickShow.bind(this) },
+						this.props.showSetting
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: 'btn btn-danger', id: this.props.hideSetting, onClick: this.handleOnClickHide.bind(this) },
+						this.props.hideSetting
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: 'btn btn-warning', id: this.props.saveSetting, onClick: this.handleOnClickSaveSetting.bind(this) },
+						this.props.saveSetting
+					),
+					this.state.isShow && _react2.default.createElement(_setupinfo2.default, {
+						username: username,
+						apiKey: apiKey,
+						authDomain: authDomain,
+						databaseURL: databaseURL,
+						storageBucket: storageBucket,
+						messagingSenderId: messagingSenderId,
+						localStorage: this.state.storage
+					})
+				);
+			}
+		}]);
+
+		return Setup;
+	}(_react2.default.Component);
+
+	module.exports = Setup;
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _jquery = __webpack_require__(179);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SetupInfo = function (_React$Component) {
+		_inherits(SetupInfo, _React$Component);
+
+		function SetupInfo(props) {
+			_classCallCheck(this, SetupInfo);
+
+			var _this = _possibleConstructorReturn(this, (SetupInfo.__proto__ || Object.getPrototypeOf(SetupInfo)).call(this, props));
+
+			window.$ = _jquery2.default;
+			window.jQuery = _jquery2.default;
+			var classStr = "panel panel-primary";
+			var me = _this;
+			console.log(props);
+			_this.state = {
+				storage: _this.props.localStorage
+			};
+
+			return _this;
+		}
+
+		_createClass(SetupInfo, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				var storage = this.state.storage;
+				console.log(storage);
+				if (storage.getItem('name') != undefined) {
+					(0, _jquery2.default)('#name').val(storage.getItem('name'));
+				}
+				if (storage.getItem('apiKey') != undefined) {
+					(0, _jquery2.default)('#apiKey').val(storage.getItem('apiKey'));
+				}
+				if (storage.getItem('authDomain') != undefined) {
+					(0, _jquery2.default)('#authDomain').val(storage.getItem('authDomain'));
+				}
+				if (storage.getItem('databaseURL') != undefined) {
+					(0, _jquery2.default)('#databaseURL').val(storage.getItem('databaseURL'));
+				}
+				if (storage.getItem('storageBucket') != undefined) {
+					(0, _jquery2.default)('#storageBucket').val(storage.getItem('storageBucket'));
+				}
+				if (storage.getItem('messagingSenderId') != undefined) {
+					(0, _jquery2.default)('#messagingSenderId').val(storage.getItem('messagingSenderId'));
+				}
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var classStr = "panel panel-primary settupFieldBlock";
+
+				return _react2.default.createElement(
+					'div',
+					{ className: classStr },
+					_react2.default.createElement(
+						'div',
+						{ className: 'panel-body' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'settupFieldBlock' },
+							_react2.default.createElement(
+								'label',
+								{ className: 'col-xs-3 col-sm-3 col-md-3 col-lg-3' },
+								this.props.username
+							),
+							_react2.default.createElement('input', { className: 'col-xs-9 col-sm-9 col-md-9 col-lg-9', id: this.props.username, type: 'text' })
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'settupFieldBlock' },
+							_react2.default.createElement(
+								'label',
+								{ className: 'col-xs-3 col-sm-3 col-md-3 col-lg-3' },
+								this.props.apiKey
+							),
+							_react2.default.createElement('input', { className: 'col-xs-9 col-sm-9 col-md-9 col-lg-9', id: this.props.apiKey, type: 'text' })
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'settupFieldBlock' },
+							_react2.default.createElement(
+								'label',
+								{ className: 'col-xs-3 col-sm-3 col-md-3 col-lg-3' },
+								this.props.authDomain
+							),
+							_react2.default.createElement('input', { className: 'col-xs-9 col-sm-9 col-md-9 col-lg-9', id: this.props.authDomain, type: 'text' })
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'settupFieldBlock' },
+							_react2.default.createElement(
+								'label',
+								{ className: 'col-xs-3 col-sm-3 col-md-3 col-lg-3' },
+								this.props.databaseURL
+							),
+							_react2.default.createElement('input', { className: 'col-xs-9 col-sm-9 col-md-9 col-lg-9', id: this.props.databaseURL, type: 'text' })
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'settupFieldBlock' },
+							_react2.default.createElement(
+								'label',
+								{ className: 'col-xs-3 col-sm-3 col-md-3 col-lg-3' },
+								this.props.storageBucket
+							),
+							_react2.default.createElement('input', { className: 'col-xs-9 col-sm-9 col-md-9 col-lg-9', id: this.props.storageBucket, type: 'text' })
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'settupFieldBlock' },
+							_react2.default.createElement(
+								'label',
+								{ className: 'col-xs-3 col-sm-3 col-md-3 col-lg-3' },
+								this.props.messagingSenderId
+							),
+							_react2.default.createElement('input', { className: 'col-xs-9 col-sm-9 col-md-9 col-lg-9', id: this.props.messagingSenderId, type: 'text' })
+						)
+					)
+				);
+			}
+		}]);
+
+		return SetupInfo;
+	}(_react2.default.Component);
+
+	module.exports = SetupInfo;
 
 /***/ }
 /******/ ]);

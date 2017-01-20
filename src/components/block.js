@@ -6,32 +6,41 @@ class Block extends React.Component{
 
 		super(props);
 		let classStr =  this.props.className + " block_style padding_0px";
-        var me = this;
+
 		this.state = {
           event: "",
           name:"",
           changeTime:"",
           isBlock:false,
           classStr: classStr,
-          inputClass: ''
+          inputClass: '',
+          storage: this.props.localStorage
 		};
 	}
 	handleOnFocusIn(e){
 	
-		var me = this;
+		let me = this;
+		let {storage} = me.state;
 		me.setState({event:"focusIn"});
 		me.setState({changeTime:new Date().toLocaleString()});
 		me.setState({isBlock:true});
 		me.setState({inputClass:'inputOnFocusSate'});
+		if(storage.getItem('name')!=undefined){
+			me.setState({name:storage.getItem('name')});
+		}
 	}
 	
 	handleOnFocusOut(e){
 
-		var me = this;
+		let me = this;
+		let {storage} = me.state;
 		me.setState({event:"focusOut"});
 		me.setState({changeTime:new Date().toLocaleString()});
 		me.setState({isBlock:false});
 		me.setState({inputClass:'inputOnFocusOutSate'});
+		if(storage.getItem('name')!=undefined){
+			me.setState({name:storage.getItem('name')});
+		}
 	}
 	
 	handleMouseEnter(e){
@@ -43,25 +52,30 @@ class Block extends React.Component{
 	doMouseEnter(){
 		let originClassStr = this.state.classStr;
 		originClassStr +=" mouseEnterState";
+		let {storage} = this.state;
 		this.setState({classStr:originClassStr});
 		this.setState({event:"mouseEnter"});
 		this.setState({changeTime:new Date().toLocaleString()});
 		this.setState({isBlock:true});
+		if(storage.getItem('name')!=undefined){
+			this.setState({name:storage.getItem('name')});
+		}
 	}
 	doMouseLeave(){
 		let originClassStr = this.state.classStr;
 		originClassStr= originClassStr.replace(" mouseEnterState","");
+		let {storage} = this.state;
 		this.setState({classStr:originClassStr});
 		this.setState({event:"mouseLeave"});
 		this.setState({changeTime:new Date().toLocaleString()});
 		this.setState({isBlock:false});
+		if(storage.getItem('name')!=undefined){
+			this.setState({name:storage.getItem('name')});
+		}
 	}
 	render(){
 		let classStr =  this.state.classStr;
-        
-		// this.setState({classStr:classStr});
-		console.log(classStr);
-		
+    		
 		return (
 			<div className={classStr} onMouseEnter={this.handleMouseEnter.bind(this)} onMouseLeave={this.handleMouseLeave.bind(this)}>
 				<h1>{this.props.text}</h1>

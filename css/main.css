@@ -33,3 +33,8 @@
 .inputOnFocusOutSate {
 	background: #FFF;
 }
+
+.settupFieldBlock {
+	display: block;
+	min-width: 700px;
+}

@@ -9,8 +9,7 @@ class InfoField extends React.Component{
 	}
 	render(){
 		let classStr = "padding_0px";
-		console.log(classStr);
-		// console.log(this.state);
+		
 		let isBlockStr =  (this.props.isBlock==true) ?"true" :"false";
 		return (
 			<div className={classStr}>

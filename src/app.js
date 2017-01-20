@@ -1,23 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import Hello from './components/block.js'
-
+import Block from './components/block.js';
+import Setup from './components/setup.js';
 class App extends React.Component{
 	constructor(props){
 		super(props);
+        console.log(props.localStorage);
 		this.state = {
 
 		};
 	}
 	render(){
         let {arrayContent} = this.props;
-        console.log(arrayContent);
+        let {localStorage} = this.props;
+        let showSetting = "show", hideSetting="hide",saveSetting="save";
+        
         const result = arrayContent.map(function(element){
-        	return <Hello key={element.text} textId={element.text} className="col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px" text={element.text}/>
+        	return <Block key={element.text} textId={element.text} className="col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px" text={element.text} localStorage={localStorage}/>
         });
         return(
          	<div className={this.props.className}>
+         		<Setup classStr={this.props.className} showSetting={showSetting} hideSetting={hideSetting} saveSetting={saveSetting} 
+         		localStorage={this.props.localStorage}/>
          		{result}
          	</div>
         );
@@ -52,7 +57,8 @@ var arrayContent = [{
 	"text":"2x2"
 }
 ];
+var localStorage = window.localStorage;
 ReactDOM.render(
-				<App className="row col-sm-12 col-md-12 col-lg-12 margin_0px padding_0px" arrayContent={arrayContent}/>
+				<App className="row col-sm-12 col-md-12 col-lg-12 margin_0px padding_0px" arrayContent={arrayContent} localStorage={localStorage}/>
 				, 
 				document.getElementById('hello'));
