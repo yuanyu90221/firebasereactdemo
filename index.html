@@ -20,7 +20,10 @@
         storageBucket: "",
         messagingSenderId: ""
       };
-      window.firebase = firebase.initializeApp(config);
+      window.firebase = firebase;
+      window.config = config;
+      window.database = {};
+
     </script>
 </head>
 <body>

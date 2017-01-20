@@ -6,7 +6,7 @@ class Block extends React.Component{
 
 		super(props);
 		let classStr =  this.props.className + " block_style padding_0px";
-
+		
 		this.state = {
           event: "",
           name:"",

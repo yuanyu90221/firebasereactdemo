@@ -8,7 +8,7 @@ class SetupInfo extends React.Component{
 		window.jQuery = jQuery;
 		let classStr =  "panel panel-primary";
         var me = this;
-		console.log(props);
+		
 		this.state = {
 			storage: this.props.localStorage
 		}
@@ -16,7 +16,7 @@ class SetupInfo extends React.Component{
 	}
 	componentDidMount(){
 		let storage = this.state.storage;
-		console.log(storage);
+		
 		if(storage.getItem('name')!=undefined){
 			$('#name').val(storage.getItem('name'));
 		}

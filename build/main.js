@@ -91,7 +91,6 @@
 
 			var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-			console.log(props.localStorage);
 			_this.state = {};
 			return _this;
 		}
@@ -32157,6 +32156,22 @@
 				storage.setItem('databaseURL', (0, _jquery2.default)('#databaseURL').val());
 				storage.setItem('storageBucket', (0, _jquery2.default)('#storageBucket').val());
 				storage.setItem('messagingSenderId', (0, _jquery2.default)('#messagingSenderId').val());
+				var config = {
+					apiKey: storage.getItem('apiKey'),
+					authDomain: storage.getItem('authDomain'),
+					databaseURL: storage.getItem('databaseURL'),
+					storageBucket: storage.getItem('storageBucket'),
+					messagingSenderId: storage.getItem('messagingSenderId')
+				};
+				window.config = config;
+				var firebase = window.firebase;
+				try {
+					firebase.initializeApp(config);
+					window.database = firebase.database();
+					window.userRef = database.ref('users/');
+				} catch (e) {
+					console.log(e.toString());
+				}
 			}
 		}, {
 			key: 'render',
@@ -32242,7 +32257,7 @@
 			window.jQuery = _jquery2.default;
 			var classStr = "panel panel-primary";
 			var me = _this;
-			console.log(props);
+
 			_this.state = {
 				storage: _this.props.localStorage
 			};
@@ -32254,7 +32269,7 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				var storage = this.state.storage;
-				console.log(storage);
+
 				if (storage.getItem('name') != undefined) {
 					(0, _jquery2.default)('#name').val(storage.getItem('name'));
 				}

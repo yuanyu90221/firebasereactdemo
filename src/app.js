@@ -6,7 +6,7 @@ import Setup from './components/setup.js';
 class App extends React.Component{
 	constructor(props){
 		super(props);
-        console.log(props.localStorage);
+        
 		this.state = {
 
 		};

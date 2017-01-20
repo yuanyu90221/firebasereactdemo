@@ -43,6 +43,24 @@ class Setup extends React.Component{
 		storage.setItem('databaseURL', $('#databaseURL').val());
 		storage.setItem('storageBucket',  $('#storageBucket').val());
 		storage.setItem('messagingSenderId',$('#messagingSenderId').val());
+		let config = {
+			apiKey: storage.getItem('apiKey'),
+		    authDomain: storage.getItem('authDomain'),
+		    databaseURL: storage.getItem('databaseURL'),
+		    storageBucket: storage.getItem('storageBucket'),
+		    messagingSenderId: storage.getItem('messagingSenderId')
+		};
+		window.config = config;
+		let firebase = window.firebase;
+		try{
+			firebase.initializeApp(config);
+			window.database = firebase.database();
+			window.userRef = database.ref('users/');
+		}
+		catch(e){
+			console.log(e.toString());
+		}
+		
 		
 	}
 
