@@ -20,7 +20,9 @@ class Setup extends React.Component{
         	storageBucket: "",
         	messagingSenderId: "",
         	name: "",
-        	storage: storage
+        	storage: storage,
+        	handleDataFirstLoad:props.handleDataFirstLoad,
+        	handleCellDataChange:props.handleCellDataChange
 		};
 	}
 	handleOnClickShow(e){
@@ -52,11 +54,30 @@ class Setup extends React.Component{
 		};
 		window.config = config;
 		let firebase = window.firebase;
+        var me = this;
 		try{
-			if(window.database=={}){
+			if(window.database==null){
 				firebase.initializeApp(config);
 				window.database = firebase.database();
-				window.userRef = database.ref('users/');
+				window.cellsRef = database.ref('cells/');				
+				window.cellsRef.on('child_changed', function(snapshot){
+					var status = snapshot.val();
+					// console.log(snapshot.key);
+					console.log('child changed!');
+					// console.log(cell);
+				    me.state.handleCellDataChange({key:snapshot.key, status});
+				});
+				window.cellsRef.on('child_added', function(snapshot){
+					var status = snapshot.val();
+					// console.log(snapshot.key);
+					console.log('child added!');
+					// console.log(cell);
+					me.state.handleDataFirstLoad({key:snapshot.key,status});
+				});
+			}
+			else{
+				console.log('window.database is not null');
+				// console.log(window.database);
 			}
 		}
 		catch(e){

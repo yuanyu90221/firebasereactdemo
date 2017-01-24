@@ -95,28 +95,117 @@
 
 			var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-			_this.state = {};
+			var currentCellsRef = window.cellsRef;
+			if (currentCellsRef != {}) {
+				console.log(currentCellsRef);
+			}
+			_this.state = {
+				arrayContent: [{
+					"key": "0x0",
+					"valuehist": [],
+					"statushist": []
+				}, {
+					"key": "0x1",
+					"valuehist": [],
+					"statushist": []
+				}, {
+					"key": "0x2",
+					"valuehist": [],
+					"statushist": []
+				}, {
+					"key": "1x0",
+					"valuehist": [],
+					"statushist": []
+				}, {
+					"key": "1x1",
+					"valuehist": [],
+					"statushist": []
+				}, {
+					"key": "1x2",
+					"valuehist": [],
+					"statushist": []
+				}, {
+					"key": "2x0",
+					"valuehist": [],
+					"statushist": []
+				}, {
+					"key": "2x1",
+					"valuehist": [],
+					"statushist": []
+				}, {
+					"key": "2x2",
+					"valuehist": [],
+					"statushist": []
+				}]
+
+			};
 			return _this;
 		}
 
 		_createClass(App, [{
+			key: 'handleDataFirstLoad',
+			value: function handleDataFirstLoad(e) {
+				var arrayContent = this.state.arrayContent.slice();
+				var changeObj = arrayContent.find(function (item) {
+					return item.key == e.key;
+				});
+				// changeObj.statushist.concat(e.status.statushist);
+				if (e.status.statushist.length > 0) {
+					e.status.statushist.forEach(function (status) {
+						changeObj.statushist.push(status);
+					});
+				}
+				this.setState({ arrayContent: arrayContent });
+			}
+		}, {
+			key: 'handleCellDataChange',
+			value: function handleCellDataChange(e) {
+				var arrayContent = this.state.arrayContent.slice();
+				var changeObj = arrayContent.find(function (item) {
+					return item.key == e.key;
+				});
+				if (e.status.statushist.length > 0) {
+					e.status.statushist.forEach(function (status) {
+						changeObj.statushist.push(status);
+					});
+				}
+
+				// changeObj.statushist.concat(e.status.statushist);
+				this.setState({ arrayContent: arrayContent });
+			}
+		}, {
 			key: 'render',
 			value: function render() {
-				var arrayContent = this.props.arrayContent;
+				var arrayContent = this.state.arrayContent;
 				var localStorage = this.props.localStorage;
+				var globalVar = this.props.globalVar;
 
 				var showSetting = "show",
 				    hideSetting = "hide",
 				    saveSetting = "save";
-
+				console.log(this.state.arrayContent);
 				var result = arrayContent.map(function (element) {
-					return _react2.default.createElement(_block2.default, { key: element.text, textId: element.text, className: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px', text: element.text, localStorage: localStorage });
+					var length = element.statushist.length;
+					console.log(length);
+					var lastNode = null;
+					if (length > 0) {
+						var lastStatus = element.statushist[length - 1];
+						conaole.log(lastStatus);
+						var curkey = lastStatus.keys();
+						lastNode = lastStatus[curkey[0]];
+					}
+
+					return _react2.default.createElement(_block2.default, { key: element.key, textId: element.key, className: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px', text: element.key, localStorage: localStorage,
+						lastStatus: lastNode
+					});
 				});
 				return _react2.default.createElement(
 					'div',
 					{ className: this.props.className },
 					_react2.default.createElement(_setup2.default, { classStr: this.props.className, showSetting: showSetting, hideSetting: hideSetting, saveSetting: saveSetting,
-						localStorage: this.props.localStorage }),
+						localStorage: this.props.localStorage,
+						handleDataFirstLoad: this.handleDataFirstLoad.bind(this), handleCellDataChange: this.handleCellDataChange.bind(this)
+					}),
 					result
 				);
 			}
@@ -145,6 +234,7 @@
 		"text": "2x2"
 	}];
 	var localStorage = window.localStorage;
+
 	_reactDom2.default.render(_react2.default.createElement(App, { className: 'row col-sm-12 col-md-12 col-lg-12 margin_0px padding_0px', arrayContent: arrayContent, localStorage: localStorage }), document.getElementById('hello'));
 
 /***/ },
@@ -31844,7 +31934,8 @@
 			var _this = _possibleConstructorReturn(this, (Block.__proto__ || Object.getPrototypeOf(Block)).call(this, props));
 
 			var classStr = _this.props.className + " block_style padding_0px";
-
+			var key = props.textId;
+			var lastStatus = props.lastStatus;
 			_this.state = {
 				event: "",
 				name: "",
@@ -31852,8 +31943,11 @@
 				isBlock: false,
 				classStr: classStr,
 				inputClass: '',
-				storage: _this.props.localStorage
+				storage: _this.props.localStorage,
+				key: key,
+				lastStatus: lastStatus
 			};
+
 			return _this;
 		}
 
@@ -31864,12 +31958,25 @@
 				var me = this;
 				var storage = me.state.storage;
 
-				me.setState({ event: "focusIn" });
-				me.setState({ changeTime: new Date().toLocaleString() });
-				me.setState({ isBlock: true });
-				me.setState({ inputClass: 'inputOnFocusSate' });
-				if (storage.getItem('name') != undefined) {
-					me.setState({ name: storage.getItem('name') });
+				// me.setState({event:"focusIn"});
+				// me.setState({changeTime:new Date().toLocaleString()});
+				// me.setState({isBlock:true});
+				// me.setState({inputClass:'inputOnFocusSate'});
+				// if(storage.getItem('name')!=undefined){
+				// 	me.setState({name:storage.getItem('name')});
+				// }
+
+				if (window.cellsRef != null) {
+					var inputKey = '/cells/' + me.state.key + "/statushist/";
+					var addCellRef = window.database.ref(inputKey);
+					addCellRef = addCellRef.push();
+					addCellRef.set({
+						time: new Date().getTime(),
+						id: storage.getItem('name') != undefined ? storage.getItem('name') : "nonam",
+						status: {
+							inpfoucs: 'in'
+						}
+					});
 				}
 			}
 		}, {
@@ -31878,13 +31985,26 @@
 
 				var me = this;
 				var storage = me.state.storage;
+				// me.setState({event:"focusOut"});
+				// me.setState({changeTime:new Date().toLocaleString()});
+				// me.setState({isBlock:false});
+				// me.setState({inputClass:'inputOnFocusOutSate'});
+				// if(storage.getItem('name')!=undefined){
+				// 	me.setState({name:storage.getItem('name')});
+				// }
+				// push into firebase db
 
-				me.setState({ event: "focusOut" });
-				me.setState({ changeTime: new Date().toLocaleString() });
-				me.setState({ isBlock: false });
-				me.setState({ inputClass: 'inputOnFocusOutSate' });
-				if (storage.getItem('name') != undefined) {
-					me.setState({ name: storage.getItem('name') });
+				if (window.cellsRef != null) {
+					var inputKey = '/cells/' + me.state.key + "/statushist/";
+					var addCellRef = window.database.ref(inputKey);
+					addCellRef = addCellRef.push();
+					addCellRef.set({
+						time: new Date().getTime(),
+						id: storage.getItem('name') != undefined ? storage.getItem('name') : "nonam",
+						status: {
+							inpfoucs: 'out'
+						}
+					});
 				}
 			}
 		}, {
@@ -31900,16 +32020,28 @@
 		}, {
 			key: 'doMouseEnter',
 			value: function doMouseEnter() {
-				var originClassStr = this.state.classStr;
-				originClassStr += " mouseEnterState";
+				// let originClassStr = this.state.classStr;
+				// originClassStr +=" mouseEnterState";
 				var storage = this.state.storage;
+				// this.setState({classStr:originClassStr});
+				// this.setState({event:"mouseEnter"});
+				// this.setState({changeTime:new Date().toLocaleString()});
+				// this.setState({isBlock:true});
+				// if(storage.getItem('name')!=undefined){
+				// 	this.setState({name:storage.getItem('name')});
+				// }
 
-				this.setState({ classStr: originClassStr });
-				this.setState({ event: "mouseEnter" });
-				this.setState({ changeTime: new Date().toLocaleString() });
-				this.setState({ isBlock: true });
-				if (storage.getItem('name') != undefined) {
-					this.setState({ name: storage.getItem('name') });
+				if (window.cellsRef != null) {
+					var inputKey = '/cells/' + this.state.key + "/statushist/";
+					var addCellRef = window.database.ref(inputKey);
+					addCellRef = addCellRef.push();
+					addCellRef.set({
+						time: new Date().getTime(),
+						id: storage.getItem('name') != undefined ? storage.getItem('name') : "nonam",
+						status: {
+							tdmouseenterleave: 'in'
+						}
+					});
 				}
 			}
 		}, {
@@ -31918,20 +32050,62 @@
 				var originClassStr = this.state.classStr;
 				originClassStr = originClassStr.replace(" mouseEnterState", "");
 				var storage = this.state.storage;
+				// this.setState({classStr:originClassStr});
+				// this.setState({event:"mouseLeave"});
+				// this.setState({changeTime:new Date().toLocaleString()});
+				// this.setState({isBlock:false});
+				// if(storage.getItem('name')!=undefined){
+				// 	this.setState({name:storage.getItem('name')});
+				// }
 
-				this.setState({ classStr: originClassStr });
-				this.setState({ event: "mouseLeave" });
-				this.setState({ changeTime: new Date().toLocaleString() });
-				this.setState({ isBlock: false });
-				if (storage.getItem('name') != undefined) {
-					this.setState({ name: storage.getItem('name') });
+				if (window.cellsRef != null) {
+					var inputKey = '/cells/' + this.state.key + "/statushist/";
+					var addCellRef = window.database.ref(inputKey);
+					addCellRef = addCellRef.push();
+					addCellRef.set({
+						time: new Date().getTime(),
+						id: storage.getItem('name') != undefined ? storage.getItem('name') : "noname",
+						status: {
+							tdmouseenterleave: 'out'
+						}
+					});
 				}
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				var classStr = this.state.classStr;
-
+				var inputClass = '';
+				var lastStatus = this.props.lastStatus;
+				// console.log(lastStatus);
+				var lastStatusId = lastStatus == null ? "" : this.props.lastStatus.id != undefined ? lastStatus.id : "";
+				var lastStatusName = "";
+				var isBlock = false;
+				if (lastStatus != null) {
+					if (lastStatus.tdmouseenterleave != undefined) {
+						lastStatusName = lastStatus.tdmouseenterleave == 'in' ? "mouseEnter" : "mouseLeave";
+						if (lastStatusName == 'mouseEnter') {
+							isBlock = true;
+							classStr += " mouseEnterState";
+						}
+					} else if (lastStatus.inpfoucs != undefined) {
+						lastStatusName = lastStatus.inpfoucs == 'in' ? "focusIn" : "focusOut";
+						if (lastStatusName == 'focusIn') {
+							isBlock = true;
+							inputClass: 'inputOnFocusSate';
+						} else {
+							inputClass: 'inputOnFocusOutSate';
+						}
+					} else {
+						lastStatusName = "";
+					}
+				}
+				var changeTime = "";
+				if (lastStatus != null) {
+					if (lastStatus.time != undefined) {
+						changeTime = new Date(lastStatus.time).toLocaleString();
+					}
+				}
 				return _react2.default.createElement(
 					'div',
 					{ className: classStr, onMouseEnter: this.handleMouseEnter.bind(this), onMouseLeave: this.handleMouseLeave.bind(this) },
@@ -31945,8 +32119,8 @@
 						handleOnFocusOut: this.handleOnFocusOut.bind(this),
 						inputClass: this.state.inputClass
 					}),
-					_react2.default.createElement(_infofield2.default, { name: this.state.name,
-						changeTime: this.state.changeTime, event: this.state.event, isBlock: this.state.isBlock })
+					_react2.default.createElement(_infofield2.default, { name: lastStatusId,
+						changeTime: changeTime, event: lastStatusName, isBlock: isBlock })
 				);
 			}
 		}]);
@@ -32128,7 +32302,9 @@
 				storageBucket: "",
 				messagingSenderId: "",
 				name: "",
-				storage: storage
+				storage: storage,
+				handleDataFirstLoad: props.handleDataFirstLoad,
+				handleCellDataChange: props.handleCellDataChange
 			};
 			return _this;
 		}
@@ -32169,11 +32345,29 @@
 				};
 				window.config = config;
 				var firebase = window.firebase;
+				var me = this;
 				try {
-					if (window.database == {}) {
+					if (window.database == null) {
 						firebase.initializeApp(config);
 						window.database = firebase.database();
-						window.userRef = database.ref('users/');
+						window.cellsRef = database.ref('cells/');
+						window.cellsRef.on('child_changed', function (snapshot) {
+							var status = snapshot.val();
+							// console.log(snapshot.key);
+							console.log('child changed!');
+							// console.log(cell);
+							me.state.handleCellDataChange({ key: snapshot.key, status: status });
+						});
+						window.cellsRef.on('child_added', function (snapshot) {
+							var status = snapshot.val();
+							// console.log(snapshot.key);
+							console.log('child added!');
+							// console.log(cell);
+							me.state.handleDataFirstLoad({ key: snapshot.key, status: status });
+						});
+					} else {
+						console.log('window.database is not null');
+						// console.log(window.database);
 					}
 				} catch (e) {
 					console.log(e.toString());
