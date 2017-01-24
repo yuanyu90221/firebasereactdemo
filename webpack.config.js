@@ -29,6 +29,15 @@ module.exports = {
           presets: ['es2015', 'react'],
         },
       },
+      {
+        test: /\.css$/, // Only .css files
+        loader: 'style!css' // Run both loaders
+      },
+      // SASS
+      {
+        test: /\.scss$/,
+        loader: 'style!css!sass'
+      }
     ],
   },
   // devServer 則是 webpack-dev-server 設定
