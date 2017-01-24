@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Block from './components/block.js';
 import Setup from './components/setup.js';
+import '../css/main.css';
+import '../assets/jquery/dist/jquery.min.js';
 class App extends React.Component{
 	constructor(props){
 		super(props);
