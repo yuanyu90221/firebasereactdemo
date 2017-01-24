@@ -62,22 +62,15 @@ class Setup extends React.Component{
 				window.cellsRef = database.ref('cells/');				
 				window.cellsRef.on('child_changed', function(snapshot){
 					var status = snapshot.val();
-					// console.log(snapshot.key);
-					console.log('child changed!');
-					// console.log(cell);
 				    me.state.handleCellDataChange({key:snapshot.key, status});
 				});
 				window.cellsRef.on('child_added', function(snapshot){
 					var status = snapshot.val();
-					// console.log(snapshot.key);
-					console.log('child added!');
-					// console.log(cell);
 					me.state.handleDataFirstLoad({key:snapshot.key,status});
 				});
 			}
 			else{
 				console.log('window.database is not null');
-				// console.log(window.database);
 			}
 		}
 		catch(e){

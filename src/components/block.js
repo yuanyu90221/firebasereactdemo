@@ -7,6 +7,7 @@ class Block extends React.Component{
 		let classStr =  this.props.className + " block_style padding_0px";
 		let key =  props.textId;
 		let lastStatus = props.lastStatus;
+		// console.log(lastStatus);
 		this.state = {
           event: "",
           name:"",
@@ -79,8 +80,8 @@ class Block extends React.Component{
 		this.doMouseLeave();
 	}
 	doMouseEnter(){
-		// let originClassStr = this.state.classStr;
-		// originClassStr +=" mouseEnterState";
+		let originClassStr = this.state.classStr;
+		originClassStr +=" mouseEnterState";
 		let {storage} = this.state;
 		// this.setState({classStr:originClassStr});
 		// this.setState({event:"mouseEnter"});
@@ -131,33 +132,32 @@ class Block extends React.Component{
 		let classStr =  this.state.classStr;
 		let inputClass = '';
     	let lastStatus = this.props.lastStatus;
-    	// console.log(lastStatus);
+    	console.log(lastStatus);
     	let lastStatusId =(lastStatus==null) ?"":(this.props.lastStatus.id!=undefined)?lastStatus.id:"";
     	let lastStatusName ="";
     	let isBlock = false;
     	if(lastStatus!=null){
-    	    if(lastStatus.tdmouseenterleave!=undefined){
-    	    	lastStatusName = (lastStatus.tdmouseenterleave=='in')? "mouseEnter":"mouseLeave";
+    	    if(lastStatus.status.tdmouseenterleave!==undefined){
+    	    	lastStatusName = (lastStatus.status.tdmouseenterleave=='in')? "mouseEnter":"mouseLeave";
     	    	if(lastStatusName=='mouseEnter'){
     	    		isBlock = true;
     	    		classStr += " mouseEnterState";    	    		
     	    	}
-    	    	
+    	        if(lastStatusName=='mouseLeave'){
+ 					classStr = classStr.replace(" mouseEnterState","");   	    		
+    	    	}
     	    }
-    	    else if(lastStatus.inpfoucs!=undefined){
-    	    	lastStatusName = (lastStatus.inpfoucs=='in')?"focusIn":"focusOut";
+    	    if(lastStatus.status.inpfoucs!==undefined){
+    	    	lastStatusName = (lastStatus.status.inpfoucs=='in')?"focusIn":"focusOut";
     	    	if(lastStatusName=='focusIn'){
     	    		isBlock = true;
-    	    		inputClass:'inputOnFocusSate';
+    	    		inputClass='inputOnFocusSate';
     	    	}
-    	    	else{
-    	    		inputClass:'inputOnFocusOutSate';
+    	        if(lastStatusName=='focusOut'){
+    	    		inputClass='inputOnFocusOutSate';
     	    	}
     	    }
-    	    else{
-    	    	lastStatusName = "";
-
-    	    }
+    	    
     	}
     	let changeTime = "";
         if(lastStatus!=null){
@@ -171,7 +171,7 @@ class Block extends React.Component{
 				<InputField textId={this.props.textId} 
 					handleOnFocusIn = {this.handleOnFocusIn.bind(this)}
 					handleOnFocusOut = {this.handleOnFocusOut.bind(this)}
-					inputClass = {this.state.inputClass}
+					inputClass = {inputClass}
 				/>
 				<InfoField name={lastStatusId}
 					changeTime={changeTime} event={lastStatusName} isBlock={isBlock}/>

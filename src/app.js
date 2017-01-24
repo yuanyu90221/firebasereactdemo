@@ -4,7 +4,6 @@ import $ from 'jquery';
 import Block from './components/block.js';
 import Setup from './components/setup.js';
 import '../css/main.css';
-import '../assets/jquery/dist/jquery.min.js';
 class App extends React.Component{
 	constructor(props){
 		super(props);
@@ -65,30 +64,20 @@ class App extends React.Component{
 	}
 	
 	handleDataFirstLoad(e){
-		var arrayContent = this.state.arrayContent.slice();
-		var changeObj = arrayContent.find(function(item){
-			return item.key == e.key;
-		});
-		// changeObj.statushist.concat(e.status.statushist);
-		if(e.status.statushist.length > 0){
-			e.status.statushist.forEach(function(status){
-				changeObj.statushist.push(status);
-			});
-		}
-		this.setState({arrayContent:arrayContent});
+		// var arrayContent = this.state.arrayContent.slice();
+		// var changeObj = arrayContent.find(function(item){
+		// 	return item.key == e.key;
+		// });
+		// changeObj.statushist.push(e.status.statushist);
+		// this.setState({arrayContent:arrayContent});
 	}
     handleCellDataChange(e){
     	var arrayContent = this.state.arrayContent.slice();
 		var changeObj = arrayContent.find(function(item){
 			return item.key == e.key;
 		});
-		if(e.status.statushist.length>0){
-			e.status.statushist.forEach(function(status){
-				changeObj.statushist.push(status);
-			});
-		}
-
-		// changeObj.statushist.concat(e.status.statushist);
+		
+		changeObj.statushist.push(e.status.statushist);
 		this.setState({arrayContent:arrayContent});
     }
 	render(){
@@ -96,16 +85,17 @@ class App extends React.Component{
         let {localStorage} = this.props;
         let {globalVar} = this.props;
         let showSetting = "show", hideSetting="hide",saveSetting="save";
-        console.log(this.state.arrayContent);
+        // console.log(this.state.arrayContent);
         const result = arrayContent.map(function(element){
         	let length = element.statushist.length;
-        	console.log(length);
+        	// console.log(length);
         	let lastNode = null;
         	if(length > 0){
         		let lastStatus = element.statushist[length-1];
-        		conaole.log(lastStatus);
-            	let curkey = lastStatus.keys();
-        		lastNode = lastStatus[curkey[0]];
+        		// console.log(lastStatus);
+            	let curkey = Object.keys(lastStatus);
+        		lastNode = lastStatus[curkey[curkey.length-1]];
+        		// console.log(lastNode);
         	} 
 
         	return (<Block key={element.key} textId={element.key} className="col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px" text={element.key} localStorage={localStorage}
