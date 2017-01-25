@@ -143,7 +143,7 @@ class Block extends React.Component{
     	    		isBlock = true;
     	    		classStr += " mouseEnterState";    	    		
     	    	}
-    	        if(lastStatusName=='mouseLeave'){
+    	        else {
  					classStr = classStr.replace(" mouseEnterState","");   	    		
     	    	}
     	    }
@@ -153,7 +153,7 @@ class Block extends React.Component{
     	    		isBlock = true;
     	    		inputClass='inputOnFocusSate';
     	    	}
-    	        if(lastStatusName=='focusOut'){
+    	        else {
     	    		inputClass='inputOnFocusOutSate';
     	    	}
     	    }

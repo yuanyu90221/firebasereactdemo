@@ -32077,7 +32077,7 @@
 						if (lastStatusName == 'mouseEnter') {
 							isBlock = true;
 							classStr += " mouseEnterState";
-						} else if (lastStatusName == 'mouseLeave') {
+						} else {
 							classStr = classStr.replace(" mouseEnterState", "");
 						}
 					}
@@ -32086,7 +32086,7 @@
 						if (lastStatusName == 'focusIn') {
 							isBlock = true;
 							inputClass = 'inputOnFocusSate';
-						} else if (lastStatusName == 'focusOut') {
+						} else {
 							inputClass = 'inputOnFocusOutSate';
 						}
 					}
