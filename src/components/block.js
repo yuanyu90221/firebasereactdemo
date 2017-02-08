@@ -7,7 +7,10 @@ class Block extends React.Component{
 		let classStr =  this.props.className + " block_style padding_0px";
 		let key =  props.textId;
 		let lastStatus = props.lastStatus;
-		// console.log(lastStatus);
+		let lastValue = props.value;
+		console.log('first Value');
+		console.log(lastValue);
+		console.log('lastValue');
 		this.state = {
           event: "",
           name:"",
@@ -17,9 +20,25 @@ class Block extends React.Component{
           inputClass: '',
           storage: this.props.localStorage,
           key: key,
-          lastStatus: lastStatus
+          lastStatus: lastStatus,
+          lastValue: lastValue
 		};
 
+	}
+	handleOnTextChange(e){
+		let me = this;
+		let {storage} = me.state;
+		let value = e.target.value;
+		if(window.cellsRef!=null){
+			let inputKey = '/cells/'+me.state.key + "/valuehist";
+		    var addCellRef = window.database.ref(inputKey);
+		    addCellRef=addCellRef.push();
+		    addCellRef.set({
+		    	time: new Date().getTime(),
+		    	id: (storage.getItem('name')!=undefined)?storage.getItem('name'):"nonam",
+		    	value: value
+		    });
+		}	
 	}
 	handleOnFocusIn(e){
 	
@@ -125,7 +144,11 @@ class Block extends React.Component{
 		let classStr =  this.state.classStr;
 		let inputClass = '';
     	let lastStatus = this.props.lastStatus;
-    	console.log(lastStatus);
+    	let value = this.props.value.value;
+    	console.log('now value:');
+    	console.log(value);
+    	console.log("========================");
+    	// console.log(lastStatus);
     	let lastStatusId =(lastStatus==null) ?"":(this.props.lastStatus.id!=undefined)?lastStatus.id:"";
     	let lastStatusName ="";
     	let inpfocus  = "";
@@ -168,7 +191,9 @@ class Block extends React.Component{
 				<InputField textId={this.props.textId} 
 					handleOnFocusIn = {this.handleOnFocusIn.bind(this)}
 					handleOnFocusOut = {this.handleOnFocusOut.bind(this)}
+					handleOnTextChange = {this.handleOnTextChange.bind(this)}
 					inputClass = {inputClass}
+					value = {value}
 				/>
 				<InfoField name={lastStatusId}
 					changeTime={changeTime} isBlock={isBlock}

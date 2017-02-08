@@ -3,7 +3,7 @@ import React from 'react';
 class InputField extends React.Component{
 	constructor(props){
 		super(props);
-
+		console.log(this.props.value);
 		this.state = {
 
 		};
@@ -14,7 +14,10 @@ class InputField extends React.Component{
 		return (
 			<input type="text" className={classStr} id={this.props.textId} 
 			   onFocus={this.props.handleOnFocusIn.bind(this)}
-			   onBlur={this.props.handleOnFocusOut.bind(this)}/>
+			   onBlur={this.props.handleOnFocusOut.bind(this)}
+			   onChange={this.props.handleOnTextChange.bind(this)}
+			   value={this.props.value}
+			   />
 		);
 	}
 }

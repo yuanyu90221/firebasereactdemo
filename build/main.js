@@ -95,7 +95,8 @@
 
 			var currentCellsRef = window.cellsRef;
 			if (currentCellsRef != {}) {
-				console.log(currentCellsRef);
+				// console.log(currentCellsRef);
+
 			}
 			_this.state = {
 				arrayContent: [{
@@ -143,23 +144,42 @@
 		_createClass(App, [{
 			key: 'handleDataFirstLoad',
 			value: function handleDataFirstLoad(e) {
-				// var arrayContent = this.state.arrayContent.slice();
-				// var changeObj = arrayContent.find(function(item){
-				// 	return item.key == e.key;
-				// });
-				// changeObj.statushist.push(e.status.statushist);
-				// this.setState({arrayContent:arrayContent});
-			}
-		}, {
-			key: 'handleCellDataChange',
-			value: function handleCellDataChange(e) {
-				// console.log(e);
+				console.log('first load');
+				console.log(e);
 				var arrayContent = this.state.arrayContent.slice();
 				var changeObj = arrayContent.find(function (item) {
 					return item.key == e.key;
 				});
+				if (e.status.valuehist !== undefined) {
+					console.log('before valuehist:');
+					console.log(e.status.valuehist);
+					console.log("=============================================");
+					changeObj.valuehist.push(e.status.valuehist);
+				}
+				if (e.status.statushist !== undefined) {
+					changeObj.statushist.push(e.status.statushist);
+				}
 
-				changeObj.statushist.push(e.status.statushist);
+				this.setState({ arrayContent: arrayContent });
+			}
+		}, {
+			key: 'handleCellDataChange',
+			value: function handleCellDataChange(e) {
+
+				var arrayContent = this.state.arrayContent.slice();
+				var changeObj = arrayContent.find(function (item) {
+					return item.key == e.key;
+				});
+				if (e.status.valuehist !== undefined) {
+					console.log('before valuehist:');
+					console.log(e.status.valuehist);
+					console.log("=============================================");
+					changeObj.valuehist.push(e.status.valuehist);
+				}
+				if (e.status.statushist !== undefined) {
+					changeObj.statushist.push(e.status.statushist);
+				}
+
 				this.setState({ arrayContent: arrayContent });
 			}
 		}, {
@@ -175,8 +195,9 @@
 				// console.log(this.state.arrayContent);
 				var result = arrayContent.map(function (element) {
 					var length = element.statushist.length;
-					console.log(length);
+					// console.log(length);
 					var lastNode = null;
+					var value = { value: "" };
 					if (length > 0) {
 						// let inpfocus = element.statushist.inpfocus[length];
 						var lastStatus = element.statushist[length - 1];
@@ -184,7 +205,7 @@
 						var tdmouseenterleave = { status: "out" };
 						var id = "noname";
 						var time = "";
-						console.log(lastStatus);
+						// console.log(lastStatus);
 						if (lastStatus.inpfocus !== undefined) {
 							var inpfocusKey = Object.keys(lastStatus.inpfocus);
 							inpfocus = lastStatus.inpfocus[inpfocusKey[inpfocusKey.length - 1]];
@@ -202,9 +223,22 @@
 						lastNode = { tdmouseenterleave: tdmouseenterleave.status, inpfocus: inpfocus.status, id: id, time: time };
 						console.log(lastNode);
 					}
+					var curpos = element.valuehist.length;
+					console.log('this is valuehist:');
+					console.log(curpos);
+					console.log(element.valuehist);
+					if (curpos > 0) {
 
+						var lastValue = element.valuehist[curpos - 1];
+						if (lastValue != null) {
+							var valueKey = Object.keys(lastValue);
+							value = lastValue[valueKey[valueKey.length - 1]];
+							console.log('current value');
+							console.log(value);
+						}
+					}
 					return _react2.default.createElement(_block2.default, { key: element.key, textId: element.key, className: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px', text: element.key, localStorage: localStorage,
-						lastStatus: lastNode
+						lastStatus: lastNode, value: value
 					});
 				});
 				return _react2.default.createElement(
@@ -31944,7 +31978,10 @@
 			var classStr = _this.props.className + " block_style padding_0px";
 			var key = props.textId;
 			var lastStatus = props.lastStatus;
-			// console.log(lastStatus);
+			var lastValue = props.value;
+			console.log('first Value');
+			console.log(lastValue);
+			console.log('lastValue');
 			_this.state = {
 				event: "",
 				name: "",
@@ -31954,13 +31991,32 @@
 				inputClass: '',
 				storage: _this.props.localStorage,
 				key: key,
-				lastStatus: lastStatus
+				lastStatus: lastStatus,
+				lastValue: lastValue
 			};
 
 			return _this;
 		}
 
 		_createClass(Block, [{
+			key: 'handleOnTextChange',
+			value: function handleOnTextChange(e) {
+				var me = this;
+				var storage = me.state.storage;
+
+				var value = e.target.value;
+				if (window.cellsRef != null) {
+					var inputKey = '/cells/' + me.state.key + "/valuehist";
+					var addCellRef = window.database.ref(inputKey);
+					addCellRef = addCellRef.push();
+					addCellRef.set({
+						time: new Date().getTime(),
+						id: storage.getItem('name') != undefined ? storage.getItem('name') : "nonam",
+						value: value
+					});
+				}
+			}
+		}, {
 			key: 'handleOnFocusIn',
 			value: function handleOnFocusIn(e) {
 
@@ -32079,7 +32135,11 @@
 				var classStr = this.state.classStr;
 				var inputClass = '';
 				var lastStatus = this.props.lastStatus;
-				console.log(lastStatus);
+				var value = this.props.value.value;
+				console.log('now value:');
+				console.log(value);
+				console.log("========================");
+				// console.log(lastStatus);
 				var lastStatusId = lastStatus == null ? "" : this.props.lastStatus.id != undefined ? lastStatus.id : "";
 				var lastStatusName = "";
 				var inpfocus = "";
@@ -32124,7 +32184,9 @@
 					_react2.default.createElement(_inputfield2.default, { textId: this.props.textId,
 						handleOnFocusIn: this.handleOnFocusIn.bind(this),
 						handleOnFocusOut: this.handleOnFocusOut.bind(this),
-						inputClass: inputClass
+						handleOnTextChange: this.handleOnTextChange.bind(this),
+						inputClass: inputClass,
+						value: value
 					}),
 					_react2.default.createElement(_infofield2.default, { name: lastStatusId,
 						changeTime: changeTime, isBlock: isBlock,
@@ -32166,6 +32228,7 @@
 
 			var _this = _possibleConstructorReturn(this, (InputField.__proto__ || Object.getPrototypeOf(InputField)).call(this, props));
 
+			console.log(_this.props.value);
 			_this.state = {};
 			return _this;
 		}
@@ -32177,7 +32240,10 @@
 
 				return _react2.default.createElement("input", { type: "text", className: classStr, id: this.props.textId,
 					onFocus: this.props.handleOnFocusIn.bind(this),
-					onBlur: this.props.handleOnFocusOut.bind(this) });
+					onBlur: this.props.handleOnFocusOut.bind(this),
+					onChange: this.props.handleOnTextChange.bind(this),
+					value: this.props.value
+				});
 			}
 		}]);
 
@@ -32367,6 +32433,8 @@
 						window.cellsRef = database.ref('cells/');
 						window.cellsRef.on('child_changed', function (snapshot) {
 							var status = snapshot.val();
+							// console.log('this is current value:');
+							// console.log(status);
 							me.state.handleCellDataChange({ key: snapshot.key, status: status });
 						});
 						window.cellsRef.on('child_added', function (snapshot) {
