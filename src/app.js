@@ -9,7 +9,7 @@ class App extends React.Component{
 		super(props);
         let currentCellsRef = window.cellsRef;
         if(currentCellsRef!={}){
-        	console.log(currentCellsRef);
+        	// console.log(currentCellsRef);
         	
         }
 		this.state = {
@@ -64,21 +64,42 @@ class App extends React.Component{
 	}
 	
 	handleDataFirstLoad(e){
-		// var arrayContent = this.state.arrayContent.slice();
-		// var changeObj = arrayContent.find(function(item){
-		// 	return item.key == e.key;
-		// });
-		// changeObj.statushist.push(e.status.statushist);
-		// this.setState({arrayContent:arrayContent});
+		console.log('first load');
+		console.log(e);
+		var arrayContent = this.state.arrayContent.slice();
+		var changeObj = arrayContent.find(function(item){
+			return item.key == e.key;
+		});
+		if(e.status.valuehist !== undefined){
+			console.log('before valuehist:');
+    		console.log(e.status.valuehist);
+    		console.log("=============================================");
+    		changeObj.valuehist.push(e.status.valuehist);
+    	}
+	    if(e.status.statushist !== undefined){
+	    	changeObj.statushist.push(e.status.statushist);	
+	    }
+		
+		this.setState({arrayContent:arrayContent});
 	}
     handleCellDataChange(e){
-    	// console.log(e);
+
+    	
+    	
     	var arrayContent = this.state.arrayContent.slice();
 		var changeObj = arrayContent.find(function(item){
 			return item.key == e.key;
 		});
+		if(e.status.valuehist !== undefined){
+			console.log('before valuehist:');
+    		console.log(e.status.valuehist);
+    		console.log("=============================================");
+    		changeObj.valuehist.push(e.status.valuehist);
+    	}
+	    if(e.status.statushist !== undefined){
+	    	changeObj.statushist.push(e.status.statushist);	
+	    }
 		
-		changeObj.statushist.push(e.status.statushist);
 		this.setState({arrayContent:arrayContent});
     }
 	render(){
@@ -89,8 +110,9 @@ class App extends React.Component{
         // console.log(this.state.arrayContent);
         const result = arrayContent.map(function(element){
         	let length = element.statushist.length;
-        	console.log(length);
+        	// console.log(length);
         	let lastNode = null;
+        	let value= {value:""};
         	if(length > 0){
         		// let inpfocus = element.statushist.inpfocus[length];
         		let lastStatus = element.statushist[length-1];
@@ -98,7 +120,7 @@ class App extends React.Component{
         		let tdmouseenterleave = {status:"out"};
         		let id = "noname";
         		let time  = "";
-        		console.log(lastStatus);
+        		// console.log(lastStatus);
         		if(lastStatus.inpfocus!==undefined){
         			let inpfocusKey = Object.keys(lastStatus.inpfocus);
         			inpfocus = lastStatus.inpfocus[inpfocusKey[inpfocusKey.length-1]];
@@ -116,9 +138,22 @@ class App extends React.Component{
         		lastNode = {tdmouseenterleave:tdmouseenterleave.status, inpfocus:inpfocus.status, id: id, time: time};
         		console.log(lastNode);
         	} 
-
+            let curpos = element.valuehist.length;
+            console.log('this is valuehist:');
+            console.log(curpos);
+            console.log(element.valuehist);
+            if(curpos > 0 ){
+            	
+            	let lastValue = element.valuehist[curpos-1];
+            	if(lastValue!=null){
+                	let valueKey = Object.keys(lastValue);
+                	value = lastValue[valueKey[valueKey.length-1]];
+                	console.log('current value');
+                	console.log(value);
+                }
+            }
         	return (<Block key={element.key} textId={element.key} className="col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px" text={element.key} localStorage={localStorage}
-        	        lastStatus={lastNode}
+        	        lastStatus={lastNode} value={value}
         	/>)
         });
         return(

@@ -62,6 +62,8 @@ class Setup extends React.Component{
 				window.cellsRef = database.ref('cells/');				
 				window.cellsRef.on('child_changed', function(snapshot){
 					var status = snapshot.val();
+					// console.log('this is current value:');
+					// console.log(status);
 				    me.state.handleCellDataChange({key:snapshot.key, status});
 				});
 				window.cellsRef.on('child_added', function(snapshot){
