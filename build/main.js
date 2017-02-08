@@ -32127,7 +32127,7 @@
 						inputClass: inputClass
 					}),
 					_react2.default.createElement(_infofield2.default, { name: lastStatusId,
-						changeTime: changeTime, event: lastStatusName, isBlock: isBlock,
+						changeTime: changeTime, isBlock: isBlock,
 						tdmouseenterleave: tdmouseenterleave, inpfocus: inpfocus })
 				);
 			}
@@ -32238,12 +32238,6 @@
 						{ className: "labelblock" },
 						"changeTime:",
 						this.props.changeTime
-					),
-					_react2.default.createElement(
-						"label",
-						{ className: "labelblock" },
-						"Event:",
-						this.props.event
 					),
 					_react2.default.createElement(
 						"label",
