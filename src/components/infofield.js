@@ -15,7 +15,6 @@ class InfoField extends React.Component{
 			<div className={classStr}>
 				<label className="labelblock">Name:{this.props.name}</label>
 				<label className="labelblock">changeTime:{this.props.changeTime}</label>
-				<label className="labelblock">Event:{this.props.event}</label>
 				<label className="labelblock">inpfocus:{this.props.inpfocus}</label>
 				<label className="labelblock">tdmouseenterleave:{this.props.tdmouseenterleave}</label>
 				<label className="labelblock">IsBlock:{isBlockStr}</label>

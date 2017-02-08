@@ -171,7 +171,7 @@ class Block extends React.Component{
 					inputClass = {inputClass}
 				/>
 				<InfoField name={lastStatusId}
-					changeTime={changeTime} event={lastStatusName} isBlock={isBlock}
+					changeTime={changeTime} isBlock={isBlock}
 					tdmouseenterleave={tdmouseenterleave} inpfocus={inpfocus} />
 			</div>
 		);
