@@ -34,15 +34,13 @@ class Block extends React.Component{
 		// 	me.setState({name:storage.getItem('name')});
 		// }
 		if(window.cellsRef!=null){
-			let inputKey = '/cells/'+me.state.key + "/statushist/";
+			let inputKey = '/cells/'+me.state.key + "/statushist/inpfocus";
 		    var addCellRef = window.database.ref(inputKey);
 		    addCellRef=addCellRef.push();
 		    addCellRef.set({
 		    	time: new Date().getTime(),
 		    	id: (storage.getItem('name')!=undefined)?storage.getItem('name'):"nonam",
-		    	status: {
-		    		inpfoucs: 'in'
-		    	}
+		    	status: 'in'
 		    });
 		}
 	}
@@ -60,15 +58,13 @@ class Block extends React.Component{
 		// }
 		// push into firebase db
 		if(window.cellsRef!=null){
-			let inputKey = '/cells/'+me.state.key + "/statushist/";
+			let inputKey = '/cells/'+me.state.key + "/statushist/inpfocus";
 		    var addCellRef = window.database.ref(inputKey);
 		    addCellRef=addCellRef.push();
 		    addCellRef.set({
 		    	time: new Date().getTime(),
 		    	id: (storage.getItem('name')!=undefined)?storage.getItem('name'):"nonam",
-		    	status: {
-		    		inpfoucs: 'out'
-		    	}
+		    	status: 'out'
 		    });
 		}
 	}
@@ -91,15 +87,13 @@ class Block extends React.Component{
 		// 	this.setState({name:storage.getItem('name')});
 		// }
 		if(window.cellsRef!=null){
-			let inputKey = '/cells/'+this.state.key + "/statushist/";
+			let inputKey = '/cells/'+this.state.key + "/statushist/tdmouseenterleave";
 		    var addCellRef = window.database.ref(inputKey);
 		    addCellRef=addCellRef.push();
 		    addCellRef.set({
 		    	time: new Date().getTime(),
 		    	id: (storage.getItem('name')!=undefined)?storage.getItem('name'):"nonam",
-		    	status: {
-		    		tdmouseenterleave: 'in'
-		    	}
+		    	status: 'in'
 		    });
 		}
 	}
@@ -115,15 +109,14 @@ class Block extends React.Component{
 		// 	this.setState({name:storage.getItem('name')});
 		// }
 		if(window.cellsRef!=null){
-			let inputKey = '/cells/'+this.state.key + "/statushist/";
+			let inputKey = '/cells/'+this.state.key + "/statushist/tdmouseenterleave";
 		    var addCellRef = window.database.ref(inputKey);
 		    addCellRef=addCellRef.push();
 		    addCellRef.set({
 		    	time: new Date().getTime(),
 		    	id: (storage.getItem('name')!=undefined)?storage.getItem('name'):"noname",
-		    	status: {
-		    		tdmouseenterleave: 'out'
-		    	}
+		    	status: 'out'
+		    	
 		    });
 		}
 
@@ -135,10 +128,13 @@ class Block extends React.Component{
     	console.log(lastStatus);
     	let lastStatusId =(lastStatus==null) ?"":(this.props.lastStatus.id!=undefined)?lastStatus.id:"";
     	let lastStatusName ="";
+    	let inpfocus  = "";
+    	let tdmouseenterleave = "";
     	let isBlock = false;
     	if(lastStatus!=null){
-    	    if(lastStatus.status.tdmouseenterleave!==undefined){
-    	    	lastStatusName = (lastStatus.status.tdmouseenterleave=='in')? "mouseEnter":"mouseLeave";
+    	    if(lastStatus.tdmouseenterleave!==undefined){
+    	    	lastStatusName = (lastStatus.tdmouseenterleave=='in')? "mouseEnter":"mouseLeave";
+    	    	tdmouseenterleave = lastStatus.tdmouseenterleave;
     	    	if(lastStatusName=='mouseEnter'){
     	    		isBlock = true;
     	    		classStr += " mouseEnterState";    	    		
@@ -147,8 +143,9 @@ class Block extends React.Component{
  					classStr = classStr.replace(" mouseEnterState","");   	    		
     	    	}
     	    }
-    	    if(lastStatus.status.inpfoucs!==undefined){
-    	    	lastStatusName = (lastStatus.status.inpfoucs=='in')?"focusIn":"focusOut";
+    	    if(lastStatus.inpfocus!==undefined){
+    	    	inpfocus = lastStatus.inpfocus;
+    	    	lastStatusName = (lastStatus.inpfocus=='in')?"focusIn":"focusOut";
     	    	if(lastStatusName=='focusIn'){
     	    		isBlock = true;
     	    		inputClass='inputOnFocusSate';
@@ -174,7 +171,8 @@ class Block extends React.Component{
 					inputClass = {inputClass}
 				/>
 				<InfoField name={lastStatusId}
-					changeTime={changeTime} event={lastStatusName} isBlock={isBlock}/>
+					changeTime={changeTime} event={lastStatusName} isBlock={isBlock}
+					tdmouseenterleave={tdmouseenterleave} inpfocus={inpfocus} />
 			</div>
 		);
 	}

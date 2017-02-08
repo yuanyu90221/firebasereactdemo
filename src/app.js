@@ -72,6 +72,7 @@ class App extends React.Component{
 		// this.setState({arrayContent:arrayContent});
 	}
     handleCellDataChange(e){
+    	// console.log(e);
     	var arrayContent = this.state.arrayContent.slice();
 		var changeObj = arrayContent.find(function(item){
 			return item.key == e.key;
@@ -88,14 +89,32 @@ class App extends React.Component{
         // console.log(this.state.arrayContent);
         const result = arrayContent.map(function(element){
         	let length = element.statushist.length;
-        	// console.log(length);
+        	console.log(length);
         	let lastNode = null;
         	if(length > 0){
+        		// let inpfocus = element.statushist.inpfocus[length];
         		let lastStatus = element.statushist[length-1];
-        		// console.log(lastStatus);
-            	let curkey = Object.keys(lastStatus);
-        		lastNode = lastStatus[curkey[curkey.length-1]];
-        		// console.log(lastNode);
+        		let inpfocus = {status: "out"};
+        		let tdmouseenterleave = {status:"out"};
+        		let id = "noname";
+        		let time  = "";
+        		console.log(lastStatus);
+        		if(lastStatus.inpfocus!==undefined){
+        			let inpfocusKey = Object.keys(lastStatus.inpfocus);
+        			inpfocus = lastStatus.inpfocus[inpfocusKey[inpfocusKey.length-1]];
+        			id = inpfocus.id;
+        			time = inpfocus.time;
+        		}
+        		if(lastStatus.tdmouseenterleave!==undefined){
+        			let tdmouseenterleaveKey = Object.keys(lastStatus.tdmouseenterleave);
+        		    tdmouseenterleave = lastStatus.tdmouseenterleave[tdmouseenterleaveKey[tdmouseenterleaveKey.length-1]];
+        		    id = tdmouseenterleave.id;
+        		    time = tdmouseenterleave.time;
+        		} 
+          // //   	let curkey = Object.keys(lastStatus);
+        		// // lastNode = lastStatus[curkey[curkey.length-1]];
+        		lastNode = {tdmouseenterleave:tdmouseenterleave.status, inpfocus:inpfocus.status, id: id, time: time};
+        		console.log(lastNode);
         	} 
 
         	return (<Block key={element.key} textId={element.key} className="col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px" text={element.key} localStorage={localStorage}

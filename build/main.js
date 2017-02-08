@@ -153,6 +153,7 @@
 		}, {
 			key: 'handleCellDataChange',
 			value: function handleCellDataChange(e) {
+				// console.log(e);
 				var arrayContent = this.state.arrayContent.slice();
 				var changeObj = arrayContent.find(function (item) {
 					return item.key == e.key;
@@ -174,14 +175,32 @@
 				// console.log(this.state.arrayContent);
 				var result = arrayContent.map(function (element) {
 					var length = element.statushist.length;
-					// console.log(length);
+					console.log(length);
 					var lastNode = null;
 					if (length > 0) {
+						// let inpfocus = element.statushist.inpfocus[length];
 						var lastStatus = element.statushist[length - 1];
-						// console.log(lastStatus);
-						var curkey = Object.keys(lastStatus);
-						lastNode = lastStatus[curkey[curkey.length - 1]];
-						// console.log(lastNode);
+						var inpfocus = { status: "out" };
+						var tdmouseenterleave = { status: "out" };
+						var id = "noname";
+						var time = "";
+						console.log(lastStatus);
+						if (lastStatus.inpfocus !== undefined) {
+							var inpfocusKey = Object.keys(lastStatus.inpfocus);
+							inpfocus = lastStatus.inpfocus[inpfocusKey[inpfocusKey.length - 1]];
+							id = inpfocus.id;
+							time = inpfocus.time;
+						}
+						if (lastStatus.tdmouseenterleave !== undefined) {
+							var tdmouseenterleaveKey = Object.keys(lastStatus.tdmouseenterleave);
+							tdmouseenterleave = lastStatus.tdmouseenterleave[tdmouseenterleaveKey[tdmouseenterleaveKey.length - 1]];
+							id = tdmouseenterleave.id;
+							time = tdmouseenterleave.time;
+						}
+						// //   	let curkey = Object.keys(lastStatus);
+						// // lastNode = lastStatus[curkey[curkey.length-1]];
+						lastNode = { tdmouseenterleave: tdmouseenterleave.status, inpfocus: inpfocus.status, id: id, time: time };
+						console.log(lastNode);
 					}
 
 					return _react2.default.createElement(_block2.default, { key: element.key, textId: element.key, className: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 margin_0px', text: element.key, localStorage: localStorage,
@@ -31957,15 +31976,13 @@
 				// }
 
 				if (window.cellsRef != null) {
-					var inputKey = '/cells/' + me.state.key + "/statushist/";
+					var inputKey = '/cells/' + me.state.key + "/statushist/inpfocus";
 					var addCellRef = window.database.ref(inputKey);
 					addCellRef = addCellRef.push();
 					addCellRef.set({
 						time: new Date().getTime(),
 						id: storage.getItem('name') != undefined ? storage.getItem('name') : "nonam",
-						status: {
-							inpfoucs: 'in'
-						}
+						status: 'in'
 					});
 				}
 			}
@@ -31985,15 +32002,13 @@
 				// push into firebase db
 
 				if (window.cellsRef != null) {
-					var inputKey = '/cells/' + me.state.key + "/statushist/";
+					var inputKey = '/cells/' + me.state.key + "/statushist/inpfocus";
 					var addCellRef = window.database.ref(inputKey);
 					addCellRef = addCellRef.push();
 					addCellRef.set({
 						time: new Date().getTime(),
 						id: storage.getItem('name') != undefined ? storage.getItem('name') : "nonam",
-						status: {
-							inpfoucs: 'out'
-						}
+						status: 'out'
 					});
 				}
 			}
@@ -32022,15 +32037,13 @@
 				// }
 
 				if (window.cellsRef != null) {
-					var inputKey = '/cells/' + this.state.key + "/statushist/";
+					var inputKey = '/cells/' + this.state.key + "/statushist/tdmouseenterleave";
 					var addCellRef = window.database.ref(inputKey);
 					addCellRef = addCellRef.push();
 					addCellRef.set({
 						time: new Date().getTime(),
 						id: storage.getItem('name') != undefined ? storage.getItem('name') : "nonam",
-						status: {
-							tdmouseenterleave: 'in'
-						}
+						status: 'in'
 					});
 				}
 			}
@@ -32049,15 +32062,14 @@
 				// }
 
 				if (window.cellsRef != null) {
-					var inputKey = '/cells/' + this.state.key + "/statushist/";
+					var inputKey = '/cells/' + this.state.key + "/statushist/tdmouseenterleave";
 					var addCellRef = window.database.ref(inputKey);
 					addCellRef = addCellRef.push();
 					addCellRef.set({
 						time: new Date().getTime(),
 						id: storage.getItem('name') != undefined ? storage.getItem('name') : "noname",
-						status: {
-							tdmouseenterleave: 'out'
-						}
+						status: 'out'
+
 					});
 				}
 			}
@@ -32070,10 +32082,13 @@
 				console.log(lastStatus);
 				var lastStatusId = lastStatus == null ? "" : this.props.lastStatus.id != undefined ? lastStatus.id : "";
 				var lastStatusName = "";
+				var inpfocus = "";
+				var tdmouseenterleave = "";
 				var isBlock = false;
 				if (lastStatus != null) {
-					if (lastStatus.status.tdmouseenterleave !== undefined) {
-						lastStatusName = lastStatus.status.tdmouseenterleave == 'in' ? "mouseEnter" : "mouseLeave";
+					if (lastStatus.tdmouseenterleave !== undefined) {
+						lastStatusName = lastStatus.tdmouseenterleave == 'in' ? "mouseEnter" : "mouseLeave";
+						tdmouseenterleave = lastStatus.tdmouseenterleave;
 						if (lastStatusName == 'mouseEnter') {
 							isBlock = true;
 							classStr += " mouseEnterState";
@@ -32081,8 +32096,9 @@
 							classStr = classStr.replace(" mouseEnterState", "");
 						}
 					}
-					if (lastStatus.status.inpfoucs !== undefined) {
-						lastStatusName = lastStatus.status.inpfoucs == 'in' ? "focusIn" : "focusOut";
+					if (lastStatus.inpfocus !== undefined) {
+						inpfocus = lastStatus.inpfocus;
+						lastStatusName = lastStatus.inpfocus == 'in' ? "focusIn" : "focusOut";
 						if (lastStatusName == 'focusIn') {
 							isBlock = true;
 							inputClass = 'inputOnFocusSate';
@@ -32111,7 +32127,8 @@
 						inputClass: inputClass
 					}),
 					_react2.default.createElement(_infofield2.default, { name: lastStatusId,
-						changeTime: changeTime, event: lastStatusName, isBlock: isBlock })
+						changeTime: changeTime, event: lastStatusName, isBlock: isBlock,
+						tdmouseenterleave: tdmouseenterleave, inpfocus: inpfocus })
 				);
 			}
 		}]);
@@ -32227,6 +32244,18 @@
 						{ className: "labelblock" },
 						"Event:",
 						this.props.event
+					),
+					_react2.default.createElement(
+						"label",
+						{ className: "labelblock" },
+						"inpfocus:",
+						this.props.inpfocus
+					),
+					_react2.default.createElement(
+						"label",
+						{ className: "labelblock" },
+						"tdmouseenterleave:",
+						this.props.tdmouseenterleave
 					),
 					_react2.default.createElement(
 						"label",
