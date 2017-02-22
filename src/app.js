@@ -4,6 +4,8 @@ import $ from 'jquery';
 import Block from './components/block.js';
 import Setup from './components/setup.js';
 import '../css/main.css';
+import DateTimeBlock from  './components/datetimeblock';
+import JDateTimeBlock from './components/jqdatetimepicker';
 class App extends React.Component{
 	constructor(props){
 		super(props);
@@ -163,6 +165,8 @@ class App extends React.Component{
          		handleDataFirstLoad={this.handleDataFirstLoad.bind(this)} handleCellDataChange={this.handleCellDataChange.bind(this)}
          		/>
          		{result}
+         		
+         		<JDateTimeBlock/>
          	</div>
         );
 	}
