@@ -1,0 +1,15 @@
+{
+  "name": "react-datetime",
+  "homepage": "https://github.com/YouCanBookMe/react-datetime",
+  "version": "2.8.6",
+  "_release": "2.8.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.8.6",
+    "commit": "a6752bcd880ce71dcfb7c14200c1e44e1bf25af3"
+  },
+  "_source": "https://github.com/YouCanBookMe/react-datetime.git",
+  "_target": "^2.8.6",
+  "_originalSource": "react-datetime",
+  "_direct": true
+}
