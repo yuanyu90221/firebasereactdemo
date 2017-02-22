@@ -1,11 +1,25 @@
 // 這邊使用 HtmlWebpackPlugin，將 bundle 好的 <script> 插入到 body。${__dirname} 為 ES6 語法對應到 __dirname  
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 const webpack = require('webpack');
 const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   template: `${__dirname}/index.html`,
   filename: 'index.html',
   inject: 'body',
 });
+var webpackUglifyJsPlugin = require('webpack-uglify-js-plugin');
+var uglifyJsPluginOpt = new webpackUglifyJsPlugin({
+  cacheFolder: path.resolve(__dirname, 'public/cached_uglify/'),
+  debug: true,
+  minimize: true,
+  sourceMap: false,
+  output: {
+    comments: false
+  },
+  compressor: {
+    warnings: false
+  }
+})
 var uglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 module.exports = {
   // 檔案起始點從 entry 進入，因為是陣列所以也可以是多個檔案
@@ -47,10 +61,6 @@ module.exports = {
   },
   // plugins 放置所使用的外掛
   plugins: [HTMLWebpackPluginConfig,
-    new uglifyJsPlugin({
-      compressor:{
-        warnings: false
-      }
-    })
+    uglifyJsPluginOpt
   ],
 };
